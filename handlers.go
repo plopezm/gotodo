@@ -57,11 +57,14 @@ func TodoRemove(w http.ResponseWriter, r *http.Request) {
     todoId := vars["todoId"];
 
     i, err := strconv.Atoi(todoId);
-    if err == nil {
+    if err != nil {
+    	fmt.Println("Error convirtiendo entero ", todoId);
+	fmt.Println(err);
 	panic(err);
     }
     err = RepoDestroyTodo(i);
-    if err == nil {
+    if err != nil {
+    	fmt.Println("No encontrado");
 	panic(err);
     }
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")

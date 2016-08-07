@@ -1,0 +1,17 @@
+<div class="w3-row-padding">
+	<div class="w3-col m12">
+	  <div class="w3-card-2 w3-round w3-white">
+	    <div class="w3-container w3-padding">
+	      <h6 class="w3-opacity">Create a new TODO</h6>
+		<label>Name</label>
+		<input class="w3-input" ng-model="todoController.newTodo.name" type="text">
+
+		<label>Description</label>
+		<input class="w3-input" ng-model="todoController.newTodo.desc" type="text">
+	
+		<br>
+	      <button type="button" class="w3-btn w3-theme" ng-click="todoController.saveTodo()"><i class="fa fa-pencil"></i>  Post</button>
+	    </div>
+	  </div>
+	</div>
+</div>

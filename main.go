@@ -2,6 +2,7 @@ package main
 
 import (
     "log"
+    "fmt"
     "net/http"
 )
 
@@ -32,10 +33,13 @@ var routes = Routes{
     },
 }
 
-
-
 func main() {
+    port := ":8080";
+    fmt.Println("====================================");
+    fmt.Println("Starting server at port "+port);
+    fmt.Println("====================================");
     router := NewRouter(routes)
+    fmt.Println("====================================");
+    log.Fatal(http.ListenAndServe(port, router))
 
-    log.Fatal(http.ListenAndServe(":8080", router))
 }

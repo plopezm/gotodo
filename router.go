@@ -11,12 +11,12 @@ func NewRouter(routes Routes) *mux.Router {
     
     //Looping between routes from routes.go
 
-    fmt.Println("Adding routes:");
+    fmt.Println("Adding routes:\n");
     for _, route := range routes {
         var handler http.Handler
         handler = route.HandlerFunc
         handler = Logger(handler, route.Name)
-        fmt.Println("Adding route "+route.Name+" routePath: "+route.Pattern);
+        fmt.Println("Adding route: "+route.Name+" -> "+route.Method+" "+route.Pattern);
         router.
             Methods(route.Method).
             Path(route.Pattern).
