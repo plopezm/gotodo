@@ -52,6 +52,26 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
     }
 }
 
+func TodoComplete(w http.ResponseWriter, r *http.Request){
+    vars := mux.Vars(r);
+    todoId := vars["todoId"];
+
+    i, err := strconv.Atoi(todoId);
+    if err != nil {
+    	w.WriteHeader(http.StatusBadRequest);
+	fmt.Fprintf(w, "<todoId> must be integer")
+	return;
+    }
+    err = RepoCompleteTodo(i);
+    if err != nil {
+    	w.WriteHeader(http.StatusNotFound);
+	fmt.Fprintf(w, "Todo object not found")
+	return;
+    }
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
+    w.WriteHeader(http.StatusOK)
+}
+
 func TodoRemove(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r);
     todoId := vars["todoId"];

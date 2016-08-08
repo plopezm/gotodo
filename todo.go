@@ -8,6 +8,7 @@ type Todo struct {
     Desc      string    `json:"desc"`
     Completed bool      `json:"completed"`
     Due       time.Time `json:"due"`
+    Deadline  time.Time `json:"deadline"`
 }
 
 type Todos []Todo

@@ -6,10 +6,20 @@ import (
     "github.com/gorilla/mux"
 )
 
+type Route struct {
+    Name        string
+    Method      string
+    Pattern     string
+    HandlerFunc http.HandlerFunc
+}
+
+type Routes []Route
+
+
 func NewRouter(routes Routes) *mux.Router {
     router := mux.NewRouter().StrictSlash(true)
     
-    //Looping between routes from routes.go
+    //Looping between routes from main.go
 
     fmt.Println("Adding routes:\n");
     for _, route := range routes {
@@ -23,9 +33,6 @@ func NewRouter(routes Routes) *mux.Router {
             Name(route.Name).
             Handler(handler)
     }
-
-    //Adding path as web-page server
-    router.PathPrefix("/").Handler(http.FileServer(http.Dir("webapp")))
 
     //Return router created
     return router

@@ -29,6 +29,16 @@ func RepoCreateTodo(t Todo) Todo {
     return t
 }
 
+func RepoCompleteTodo(id int) error {
+    for _, t := range todos {
+        if t.Id == id {
+	    t.Completed = true;
+            return nil
+        }
+    }
+    return fmt.Errorf("Could not find Todo with id of %d to delete", id);
+}
+
 func RepoDestroyTodo(id int) error {
     for i, t := range todos {
         if t.Id == id {

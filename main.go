@@ -26,6 +26,12 @@ var routes = Routes{
 	TodoCreate,
     },
     Route{
+	"TodoComplete",
+	"POST",
+	"/api/v1/todos/complete/{todoId}",
+	TodoComplete,
+    },
+    Route{
 	"TodoRemove",
 	"DELETE",
 	"/api/v1/todos/{todoId}",
@@ -38,7 +44,9 @@ func main() {
     fmt.Println("====================================");
     fmt.Println("Starting server at port "+port);
     fmt.Println("====================================");
-    router := NewRouter(routes)
+    router := NewRouter(routes);
+    //Adding path as web-page server
+    router.PathPrefix("/").Handler(http.FileServer(http.Dir("webapp")))
     fmt.Println("====================================");
     log.Fatal(http.ListenAndServe(port, router))
 
