@@ -12,7 +12,6 @@ app.controller('todoController', ['$scope', 'todoService', function($scope, todo
 		});
 	}	
 
-
 	this.saveTodo = function(){
 		todoService.saveTodo(this.newTodo).then(function(response){
 			console.log(response);

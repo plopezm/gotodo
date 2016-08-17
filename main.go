@@ -44,10 +44,12 @@ func main() {
     fmt.Println("====================================");
     fmt.Println("Starting server at port "+port);
     fmt.Println("====================================");
-    router := NewRouter(routes);
-    //Adding path as web-page server
-    router.PathPrefix("/").Handler(http.FileServer(http.Dir("webapp")))
-    fmt.Println("====================================");
-    log.Fatal(http.ListenAndServe(port, router))
 
+    router := NewRouter(routes);
+
+    //Adding path as web-page server
+    router.PathPrefix("/").Handler(http.FileServer(http.Dir("webapp")));
+
+    fmt.Println("====================================");
+    log.Fatal(http.ListenAndServe(port, router));
 }
