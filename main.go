@@ -50,6 +50,9 @@ func main() {
     //Adding path as web-page server
     router.PathPrefix("/").Handler(http.FileServer(http.Dir("webapp")));
 
+    //Open new mongodb session
+    mdbOpenSession("localhost");
+
     fmt.Println("====================================");
     log.Fatal(http.ListenAndServe(port, router));
 }

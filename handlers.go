@@ -7,14 +7,20 @@ import (
     "io"
     "io/ioutil"
     "strconv"
-
+    "gopkg.in/mgo.v2/bson"
     "github.com/gorilla/mux"
 )
 
 func TodoIndex(w http.ResponseWriter, r *http.Request) {
-    
-    w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-    w.WriteHeader(http.StatusOK)
+    todos, err := mdbFindTodos(nil);
+    if(err != nil){
+	w.WriteHeader(http.StatusBadRequest);
+	fmt.Fprintf(w, "error finding: %s",err)
+	return;
+    }
+
+    w.Header().Set("Content-Type", "application/json; charset=UTF-8");
+    w.WriteHeader(http.StatusOK);
 
     if err := json.NewEncoder(w).Encode(todos); err != nil {
         panic(err)
@@ -24,7 +30,18 @@ func TodoIndex(w http.ResponseWriter, r *http.Request) {
 func TodoShow(w http.ResponseWriter, r *http.Request) {
     vars := mux.Vars(r)
     todoId := vars["todoId"]
-    fmt.Fprintln(w, "Todo show:", todoId)
+
+    todos, err := mdbFindTodos(bson.M{"id": todoId});
+    if(err != nil){
+	w.WriteHeader(http.StatusBadRequest);
+	fmt.Fprintf(w, "error showing: %s",err)
+	return;
+    }
+
+    if err := json.NewEncoder(w).Encode(todos); err != nil {
+        panic(err)
+    }
+
 }
 
 func TodoCreate(w http.ResponseWriter, r *http.Request) {
@@ -42,17 +59,25 @@ func TodoCreate(w http.ResponseWriter, r *http.Request) {
         if err := json.NewEncoder(w).Encode(err); err != nil {
             panic(err)
         }
+	return;
     }
 
-    t := RepoCreateTodo(todo)
+    err = mdbInsertTodo(&todo);
+    if(err != nil){
+	w.WriteHeader(http.StatusBadRequest);
+	fmt.Fprintf(w, "error inserting: %s",err)
+	return;
+    }
+
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
     w.WriteHeader(http.StatusCreated)
-    if err := json.NewEncoder(w).Encode(t); err != nil {
+    if err := json.NewEncoder(w).Encode(todo); err != nil {
         panic(err)
     }
 }
 
 func TodoComplete(w http.ResponseWriter, r *http.Request){
+    /*
     vars := mux.Vars(r);
     todoId := vars["todoId"];
 
@@ -69,7 +94,8 @@ func TodoComplete(w http.ResponseWriter, r *http.Request){
 	return;
     }
     w.Header().Set("Content-Type", "application/json; charset=UTF-8")
-    w.WriteHeader(http.StatusOK)
+    w.WriteHeader(http.StatusOK);
+    */
 }
 
 func TodoRemove(w http.ResponseWriter, r *http.Request) {
@@ -82,7 +108,7 @@ func TodoRemove(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "<todoId> must be integer")
 	return;
     }
-    err = RepoDestroyTodo(i);
+    err = mdbRemoveTodo(bson.M{"id": i});
     if err != nil {
     	w.WriteHeader(http.StatusNotFound);
 	fmt.Fprintf(w, "Todo object not found")
