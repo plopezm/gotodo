@@ -1,5 +1,7 @@
 <div class="w3-container w3-card-2 w3-white w3-round w3-margin" ng-repeat="todo in todoController.todoList"><br>
-	<button type="button" class="w3-btn w3-theme-d1 w3-right" style="margin-top:-15px;"><i class="fa fa-remove"></i></button>
+	<button type="button" ng-click="todoController.removeTodo(todo)" class="w3-btn w3-theme-d1 w3-right" style="margin-top:-15px;">
+		<i class="fa fa-remove"></i>
+	</button>
         <img src="img/img_avatar2.png" alt="Avatar" class="w3-left w3-circle w3-margin-right" style="width:60px">
         <h4>{{todo.name}}</h4><br>
         <hr class="w3-clear">
